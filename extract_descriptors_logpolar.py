@@ -12,9 +12,9 @@ import json
 
 
 def l_clahe(img):
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
     lab = cv2.cvtColor(img, cv2.COLOR_RGB2Lab)
-    lab[:,:,0] = clahe.apply(lab[:,:,0])
+    lab[:, :, 0] = clahe.apply(lab[:, :, 0])
     return cv2.cvtColor(lab, cv2.COLOR_Lab2RGB)
 
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     parser.add_argument(
         "--sequences_folder",
-        default=os.path.join('..', 'data_upright'),
+        default=os.path.join('..', 'imw-2020'),
         help="path to config file",
         type=str)
     parser.add_argument(
@@ -90,7 +90,8 @@ if __name__ == '__main__':
     elif args.clahe_mode.lower() == 'none':
         pass
     else:
-        raise ValueError("unknown CLAHE mode. Try detector, descriptor or both")
+        raise ValueError(
+            "unknown CLAHE mode. Try detector, descriptor or both")
 
     args.method_name += suffix
 
@@ -113,10 +114,10 @@ if __name__ == '__main__':
         is_desc256=cfg.TEST.IS_DESC_256,
         orientCorrect=cfg.TEST.ORIENT_CORRECTION)
 
-    model.load_state_dict(torch.load(os.path.join(
-        'third_party',
-        'log_polar_descriptors',
-        cfg.TEST.MODEL_WEIGHTS))['state_dict'])
+    model.load_state_dict(
+        torch.load(
+            os.path.join('third_party', 'log_polar_descriptors',
+                         cfg.TEST.MODEL_WEIGHTS))['state_dict'])
     model.eval()
     model.to(device)
 
@@ -124,17 +125,20 @@ if __name__ == '__main__':
         print('Processing "{}"'.format(seq_name))
 
         keypoints = h5py.File(
-            os.path.join(args.dataset_path, seq_name, 'keypoints{}.h5'.format(suffix)), 'r')
+            os.path.join(args.dataset_path, seq_name,
+                         'keypoints{}.h5'.format(suffix)), 'r')
         scales = h5py.File(
-            os.path.join(args.dataset_path, seq_name, 'scales{}.h5'.format(suffix)), 'r')
+            os.path.join(args.dataset_path, seq_name,
+                         'scales{}.h5'.format(suffix)), 'r')
         angles = h5py.File(
-            os.path.join(args.dataset_path, seq_name, 'angles{}.h5'.format(suffix)), 'r')
+            os.path.join(args.dataset_path, seq_name,
+                         'angles{}.h5'.format(suffix)), 'r')
 
         seq_descriptors = {}
         for key, keypoints in tqdm(keypoints.items()):
 
             img = cv2.imread(
-                os.path.join(args.sequences_folder, seq_name, 'set_100', 'images', key + '.jpg'))
+                os.path.join(args.sequences_folder, seq_name, key + '.jpg'))
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             if args.clahe_mode.lower() in ['descriptor', 'both']:
                 img = l_clahe(img)
@@ -180,9 +184,10 @@ if __name__ == '__main__':
                 ]
 
                 imgs = torch.from_numpy(img).unsqueeze(0).to(device)
-                img_keypoints = [theta[0].to(device),
-                                 theta[1].to(device),
-                                 theta[2].to(device)]
+                img_keypoints = [
+                    theta[0].to(device), theta[1].to(device),
+                    theta[2].to(device)
+                ]
 
                 # Deal with batches size 1
                 if len(oris) == 1:
@@ -199,7 +204,10 @@ if __name__ == '__main__':
         if not os.path.exists(cur_path):
             os.makedirs(cur_path)
         save_h5(seq_descriptors, os.path.join(cur_path, 'descriptors.h5'))
-        sub_files_in = ['keypoints{}.h5'.format(suffix), 'scales{}.h5'.format(suffix), 'angles{}.h5'.format(suffix), 'scores{}.h5'.format(suffix)]
+        sub_files_in = [
+            'keypoints{}.h5'.format(suffix), 'scales{}.h5'.format(suffix),
+            'angles{}.h5'.format(suffix), 'scores{}.h5'.format(suffix)
+        ]
         sub_files_out = ['keypoints.h5', 'scales.h5', 'angles.h5', 'scores.h5']
 
         for sub_file_in, sub_file_out in zip(sub_files_in, sub_files_out):

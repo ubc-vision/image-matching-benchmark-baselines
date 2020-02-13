@@ -25,3 +25,9 @@
 [submodule "third_party/contextdesc"]
 	path = third_party/contextdesc
 	url = https://github.com/jyh2005xx/contextdesc.git
+[submodule "third_party/l2net"]
+	path = third_party/l2net
+	url = https://github.com/yuruntian/L2-Net.git
+[submodule "third_party/tensorflow_models"]
+	path = third_party/tensorflow_models
+	url = https://github.com/tensorflow/models
