@@ -1,0 +1,27 @@
+[submodule "third_party/hardnet"]
+	path = third_party/hardnet
+	url = https://github.com/DagnyT/hardnet.git
+[submodule "third_party/log_polar_descriptors"]
+	path = third_party/log_polar_descriptors
+	url = https://github.com/cvlab-epfl/log-polar-descriptors.git
+[submodule "third_party/geodesc"]
+	path = third_party/geodesc
+	url = https://github.com/lzx551402/geodesc.git
+[submodule "third_party/SOSNet"]
+	path = third_party/SOSNet
+	url = https://github.com/yuruntian/SOSNet.git
+[submodule "third_party/superpoint_ml_repo"]
+	path = third_party/superpoint_ml_repo
+	url = https://github.com/MagicLeapResearch/SuperPointPretrainedNetwork
+[submodule "third_party/d2net"]
+	path = third_party/d2net
+	url = https://github.com/mihaidusmanu/d2-net.git
+[submodule "third_party/HardNet2"]
+	path = third_party/HardNet2
+	url = https://github.com/pultarmi/HardNet_MultiDataset
+[submodule "third_party/r2d2"]
+	path = third_party/r2d2
+	url = https://github.com/naver/r2d2.git
+[submodule "third_party/contextdesc"]
+	path = third_party/contextdesc
+	url = https://github.com/jyh2005xx/contextdesc.git
