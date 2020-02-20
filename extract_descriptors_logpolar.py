@@ -40,7 +40,7 @@ if __name__ == '__main__':
         "--method_name", default='sift8k_8000_logpolar96', type=str)
     parser.add_argument(
         "--config_file",
-        default='third_party/log_polar_descriptors/configs/init.yml',
+        default='third_party/log_polar_descriptors/configs/init_one_example_ptn_96.yml',
         help="path to config file",
         type=str)
     parser.add_argument(
@@ -122,6 +122,7 @@ if __name__ == '__main__':
     model.to(device)
 
     for idx, seq_name in enumerate(seqs):
+
         print('Processing "{}"'.format(seq_name))
 
         keypoints = h5py.File(
@@ -136,7 +137,6 @@ if __name__ == '__main__':
 
         seq_descriptors = {}
         for key, keypoints in tqdm(keypoints.items()):
-
             img = cv2.imread(
                 os.path.join(args.sequences_folder, seq_name, key + '.jpg'))
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -179,7 +179,7 @@ if __name__ == '__main__':
                 theta = [
                     torch.from_numpy(np.array(
                         keypoint_locations)[i:i + bs]).float().squeeze(),
-                    torch.from_numpy(scales[key][:][i:i + bs]).float(),
+                    torch.from_numpy(scales[key][:][i:i + bs]).float().squeeze(),
                     torch.from_numpy(oris).float()
                 ]
 
@@ -192,6 +192,8 @@ if __name__ == '__main__':
                 # Deal with batches size 1
                 if len(oris) == 1:
                     img_keypoints[0] = img_keypoints[0].unsqueeze(0)
+                    img_keypoints[1] = img_keypoints[1].unsqueeze(0)
+                    img_keypoints[2] = img_keypoints[2].unsqueeze(0)
 
                 descriptors, patches = model({
                     key: imgs
