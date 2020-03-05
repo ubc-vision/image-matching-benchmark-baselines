@@ -180,7 +180,7 @@ if __name__ == '__main__':
                     torch.from_numpy(np.array(
                         keypoint_locations)[i:i + bs]).float().squeeze(),
                     torch.from_numpy(scales[key][:][i:i + bs]).float().squeeze(),
-                    torch.from_numpy(oris).float()
+                    torch.from_numpy(oris).float().squeeze()
                 ]
 
                 imgs = torch.from_numpy(img).unsqueeze(0).to(device)
