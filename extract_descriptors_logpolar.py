@@ -44,6 +44,11 @@ if __name__ == '__main__':
         help="path to config file",
         type=str)
     parser.add_argument(
+        "--mrSize",
+        default=12.0,
+        type=float,
+        help=' patch size in image is mrSize * pt.size. Default mrSize is 12')
+    parser.add_argument(
         "--subset",
         default='both',
         type=str,
@@ -182,6 +187,8 @@ if __name__ == '__main__':
                     torch.from_numpy(scales[key][:][i:i + bs]).float().squeeze(),
                     torch.from_numpy(oris).float().squeeze()
                 ]
+                # due to multiplier during extraction from detect_sift_keypoints...
+                theta[1] = theta[1]/args.mrSize
 
                 imgs = torch.from_numpy(img).unsqueeze(0).to(device)
                 img_keypoints = [
