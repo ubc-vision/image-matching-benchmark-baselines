@@ -31,3 +31,6 @@
 [submodule "third_party/tensorflow_models"]
 	path = third_party/tensorflow_models
 	url = https://github.com/tensorflow/models
+[submodule "third_party/lfnet"]
+	path = third_party/lfnet
+	url = git@github.com:vcg-uvic/lf-net-release.git

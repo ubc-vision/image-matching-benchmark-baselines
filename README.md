@@ -36,6 +36,7 @@ We provide support for the following methods:
 * [D2-Net](https://github.com/mihaidusmanu/d2-net)
 * [DELF](https://github.com/tensorflow/models/blob/master/research/delf/INSTALL_INSTRUCTIONS.md)
 * [Contextdesc](https://github.com/lzx551402/contextdesc)
+* [LFNet](https://github.com/vcg-uvic/lf-net-release)
 * [R2D2](https://github.com/naver/r2d2)
 
 We have pre-packaged conda environments: see below for details. You can install miniconda following [these instructions](https://docs.conda.io/en/latest/miniconda.html) (we have had problems with the latest version -- consider an [older one](https://repo.continuum.io/miniconda/Miniconda3-4.5.12-Linux-x86_64.sh)). You can install an environment with:
@@ -153,6 +154,7 @@ python extract_d2net.py --num_kp=8000 --multiscale --method_name=d2net-multiscal
 ```
 (If the multi-scale variant crashes, please check [this](https://github.com/mihaidusmanu/d2-net/issues/22).)
 
+
 ### ContextDesc
 
 Use environment `hardnet` and download the model weights:
@@ -178,6 +180,7 @@ You may delete the `tmp` folder after extracting the features:
 rm -rf ../benchmark-features/tmp_contextdesc
 ```
 
+
 ### DELF
 
 You can install DELF from the tensorflow models repository, following [these instructions](https://github.com/tensorflow/models/blob/master/research/delf/INSTALL_INSTRUCTIONS.md).
@@ -189,6 +192,20 @@ wget http://storage.googleapis.com/delf/delf_gld_20190411.tar.gz -O third_party/
 tar -C third_party/tensorflow_models/research/delf/delf/python/examples/parameters/ -xvf third_party/tensorflow_models/research/delf/delf/python/examples/parameters/delf_gld_20190411.tar.gz
 ```
 and add the folder `third_party/tensorflow_models/research` to $PYTHONPATH. See `run_delf.py` for usage.
+
+
+### LF-Net
+
+Use environment `lfnet` and download the model weights:
+```
+mkdir third_party/lfnet/release
+wget https://gfx.uvic.ca/pubs/2018/ono2018lfnet/lfnet-norotaug.tar.gz -O third_party/lfnet/release/lfnet-norotaug.tar.gz
+tar -C third_party/lfnet/release/ -xf third_party/lfnet/release/lfnet-norotaug.tar.gz
+```
+Use environment 'lfnet'. Refer to extract_lfnet.py for more options. Extract LF-Net with default 2K keypoints and without resize image:
+```
+python extract_lfnet.py --out_dir=../benchmark-features/lfnet
+```
 
 
 ### R2D2
