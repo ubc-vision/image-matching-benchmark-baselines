@@ -41,7 +41,7 @@ We provide support for the following methods:
 
 We have pre-packaged conda environments: see below for details. You can install miniconda following [these instructions](https://docs.conda.io/en/latest/miniconda.html) (we have had problems with the latest version -- consider an [older one](https://repo.continuum.io/miniconda/Miniconda3-4.5.12-Linux-x86_64.sh)). You can install an environment with:
 ```
-conda create env -f system/<environment>.yml
+conda env create -f system/<environment>.yml
 ```
 
 And switch between them with:
