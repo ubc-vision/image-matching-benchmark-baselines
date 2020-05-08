@@ -103,7 +103,7 @@ if __name__ == '__main__':
     print('Saving descriptors to folder: {}'.format(args.method_name))
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+    print (device)
     num_gpus = int(
         os.environ["WORLD_SIZE"]) if "WORLD_SIZE" in os.environ else 1
 
@@ -139,11 +139,12 @@ if __name__ == '__main__':
         angles = h5py.File(
             os.path.join(args.dataset_path, seq_name,
                          'angles{}.h5'.format(suffix)), 'r')
-
         seq_descriptors = {}
+        scene_path = os.path.join(args.sequences_folder,
+                                     seq_name, 'set_100/images/')
         for key, keypoints in tqdm(keypoints.items()):
             img = cv2.imread(
-                os.path.join(args.sequences_folder, seq_name, key + '.jpg'))
+                os.path.join(scene_path, key + '.jpg'))
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             if args.clahe_mode.lower() in ['descriptor', 'both']:
                 img = l_clahe(img)

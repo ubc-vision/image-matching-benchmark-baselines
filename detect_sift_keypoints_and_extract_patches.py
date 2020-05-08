@@ -130,7 +130,7 @@ if __name__ == '__main__':
                 sec_ori, sec_resp = {}, {}, {}, {}, {}, {}
 
         scene_path = os.path.join(args.scenes_folder,
-                                     scene)
+                                     scene, 'set_100/images/')
         num_patches = []
         img_list = [x for x in os.listdir(scene_path) if x.endswith('.jpg')]
         for im_path in tqdm(img_list):
