@@ -18,8 +18,9 @@ def get_transforms(color):
     STD_IMAGE = 0.20197947209
 
     transform = transforms.Compose([
-        transforms.Lambda(cv2_greyscale), transforms.Lambda(cv2_scale),
-        transforms.Lambda(np_reshape), transforms.ToTensor(),
+        transforms.Lambda(cv2_greyscale),# transforms.Lambda(cv2_scale),
+        #transforms.Lambda(np_reshape),
+        transforms.ToTensor(),
         transforms.Normalize((MEAN_IMAGE, ), (STD_IMAGE, ))
     ])
 
@@ -76,6 +77,11 @@ if __name__ == '__main__':
         default='None',
         type=str,
         help='can be None, detector, descriptor, both')
+    parser.add_argument(
+        "--patchSize",
+        default=32,
+        type=int,
+        help=' patch size in pixels. Default 32')
 
     args = parser.parse_args()
 
@@ -122,6 +128,9 @@ if __name__ == '__main__':
 
     if abs(args.mrSize - 12.) > 0.1:
         suffix+= '_mrSize{:.1f}'.format(args.mrSize)
+    assert(args.patchSize > 0)
+    if args.patchSize != 32:
+        suffix += '_patchSize{}'.format(args.patchSize)
 
     args.method_name += suffix
     print('Saving descriptors to folder: {}'.format(args.method_name))
@@ -150,7 +159,6 @@ if __name__ == '__main__':
                 patches = patches.value
                 bs = 128
                 descriptors = np.zeros((len(patches), 128))
-
                 for i in range(0, len(patches), bs):
                     data_a = patches[i:i + bs, :, :, :]
                     data_a = torch.stack(

@@ -58,6 +58,11 @@ if __name__ == '__main__':
         type=float,
         help=' patch size in image is mrSize * pt.size. Default mrSize is 12')
     parser.add_argument(
+        "--patchSize",
+        default=32,
+        type=int,
+        help=' patch size in pixels. Default 32')
+    parser.add_argument(
         "--lower_sift_threshold",
         default='True',
         type=str2bool,
@@ -124,6 +129,9 @@ if __name__ == '__main__':
     if abs(args.mrSize - 12.) > 0.1:
         suffix += '_mrSize{:.1f}'.format(args.mrSize)
 
+    assert(args.patchSize > 0)
+    if args.patchSize != 32:
+        suffix += '_patchSize{}'.format(args.patchSize)
     for scene in scenes:
         print('Processing "{}"'.format(scene))
         scene_patches, scene_kp, scene_loc, scene_scale, \
@@ -188,7 +196,7 @@ if __name__ == '__main__':
 
             # Extract patches
             patches = extract_patches(
-                kpts, im, 32, args.mrSize)
+                kpts, im, args.patchSize, args.mrSize)
             keypoints = np.array([(x.pt[0], x.pt[1]) for x in kpts ]).reshape(-1, 2)
             scales = np.array([args.mrSize * x.size for x in kpts ]).reshape(-1, 1)
             angles = np.array([x.angle for x in kpts ]).reshape(-1, 1)
