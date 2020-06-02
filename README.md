@@ -162,9 +162,12 @@ Use environment `hardnet` and download the model weights:
 mkdir third_party/contextdesc/pretrained
 wget https://research.altizure.com/data/contextdesc_models/contextdesc_pp.tar -O third_party/contextdesc/pretrained/contextdesc_pp.tar
 wget https://research.altizure.com/data/contextdesc_models/retrieval_model.tar -O third_party/contextdesc/pretrained/retrieval_model.tar
+wget https://research.altizure.com/data/contextdesc_models/contextdesc_pp_upright.tar -O third_party/contextdesc/pretrained/contextdesc_pp_upright.tar
 tar -C third_party/contextdesc/pretrained/ -xf third_party/contextdesc/pretrained/contextdesc_pp.tar
+tar -C third_party/contextdesc/pretrained/ -xf third_party/contextdesc/pretrained/contextdesc_pp_upright.tar
 tar -C third_party/contextdesc/pretrained/ -xf third_party/contextdesc/pretrained/retrieval_model.tar
 rm third_party/contextdesc/pretrained/contextdesc_pp.tar
+rm third_party/contextdesc/pretrained/contextdesc_pp_upright.tar
 rm third_party/contextdesc/pretrained/retrieval_model.tar
 ```
 Generate the `.yaml` file for ContextDesc:
