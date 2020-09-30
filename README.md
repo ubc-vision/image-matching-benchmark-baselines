@@ -1,6 +1,6 @@
 # Summary
 
-This repository contains utilities to extract local features for the [Image Matching Benchmark](https://github.com/vcg-uvic/image-matching-benchmark) and its associated challenge. For details please refer to the [website](https://vision.uvic.ca/image-matching-challenge/).
+This repository contains utilities to extract local features for the [Image Matching Benchmark](https://github.com/ubc-vision/image-matching-benchmark) and its associated challenge. For details please refer to the [website](https://image-matching-challenge.github.io).
 
 ## Data
 
@@ -202,7 +202,7 @@ and add the folder `third_party/tensorflow_models/research` to $PYTHONPATH. See 
 Use environment `lfnet` and download the model weights:
 ```
 mkdir third_party/lfnet/release
-wget https://gfx.uvic.ca/pubs/2018/ono2018lfnet/lfnet-norotaug.tar.gz -O third_party/lfnet/release/lfnet-norotaug.tar.gz
+wget https://cs.ubc.ca/research/kmyi_data/files/2018/ono2018lfnet/lfnet-norotaug.tar.gz -O third_party/lfnet/release/lfnet-norotaug.tar.gz
 tar -C third_party/lfnet/release/ -xf third_party/lfnet/release/lfnet-norotaug.tar.gz
 ```
 Use environment 'lfnet'. Refer to extract_lfnet.py for more options. Extract LF-Net with default 2K keypoints and without resize image:
