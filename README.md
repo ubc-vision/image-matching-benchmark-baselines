@@ -4,7 +4,7 @@ This repository contains utilities to extract local features for the [Image Matc
 
 ## Data
 
-Data can be downloaded [here](https://vision.uvic.ca/imw-challenge/index.md): you may want to download the images for validation and testing. Most of the scripts assume that the images are in `../imw-2020`, as follows:
+Data can be downloaded [here](https://www.cs.ubc.ca/~kmyi/imw2020/data.html): you may want to download the images for validation and testing. Most of the scripts assume that the images are in `../imw-2020`, as follows:
 
 ```
 $ ~/image-matching-benchmark-baselines $ ls ../imw-2020/
