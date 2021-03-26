@@ -38,22 +38,13 @@ if __name__ == '__main__':
         required=True,
         help='Path to store the features')
     parser.add_argument(
-        "--subset",
-        default='both',
-        type=str,
-        help='Options: "val", "test", "both"')
-
+        "--data_seq_json", type=str, default='data/val.json')
+    
     args = parser.parse_args()
 
     seqs = []
-    if args.subset not in ['val', 'test', 'both']:
-        raise ValueError('Unknown value for --subset')
-    if args.subset in ['val', 'both']:
-        with open(os.path.join('data', 'val.json')) as f:
-            seqs += json.load(f)
-    if args.subset in ['test', 'both']:
-        with open(os.path.join('data', 'test.json')) as f:
-            seqs += json.load(f)
+    with open(args.data_seq_json) as f:
+        seqs += json.load(f)
     print('Processing the following scenes: {}'.format(seqs))
 
     iscuda = common.torch_set_gpu(args.gpu)
@@ -69,9 +60,8 @@ if __name__ == '__main__':
         print('Processing scene "{}"'.format(seq))
         if not os.path.isdir('{}/{}'.format(args.save_path, seq)):
             os.makedirs('{}/{}'.format(args.save_path, seq))
-
-        images = glob('{}/{}/*.jpg'.format(args.data_path, seq))
-
+        #images = glob('{}/{}/set_100/images/*.jpg'.format(args.data_path, seq))
+        images = glob('{}/{}/set_100/images/*.jpg'.format(args.data_path, seq))
         num_kp = []
         with h5py.File('{}/{}/keypoints.h5'.format(args.save_path, seq), 'w') as f_kp, \
              h5py.File('{}/{}/descriptors.h5'.format(args.save_path, seq), 'w') as f_desc, \

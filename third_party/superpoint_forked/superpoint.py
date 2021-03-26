@@ -56,7 +56,7 @@ import cv2
 import torch
 
 import h5py
-from IPython import embed
+#from IPython import embed
 from imageio import imread, imwrite
 
 # Stub to warn about opencv version.
@@ -440,7 +440,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--sequences_folder",
-        default=os.path.join('..', 'imw-2020'),
+        default=os.path.join('..', 'data/phototourism'),
         help="path to config file",
         type=str)
     parser.add_argument(
@@ -483,26 +483,17 @@ if __name__ == '__main__':
         default=0,
         help='Number of keypoints to save (0 to keep all)')
     parser.add_argument(
-        "--subset",
-        default='both',
+        "--data_seq_json",
+        default='data/val.json',
         type=str,
-        help='Options: "val", "test", "both", "spc-fix"')
+        help='')
 
     opt, unparsed = parser.parse_known_args()
     print(opt)
 
-    if opt.subset not in ['val', 'test', 'both', 'spc-fix']:
-        raise ValueError('Unknown value for --subset')
     seqs = []
-    if opt.subset == 'spc-fix':
-        seqs += ['st_pauls_cathedral']
-    else:
-        if opt.subset in ['val', 'both']:
-            with open(os.path.join('data', 'val.json')) as f:
-                seqs += json.load(f)
-        if opt.subset in ['test', 'both']:
-            with open(os.path.join('data', 'test.json')) as f:
-                seqs += json.load(f)
+    with open(opt.data_seq_json) as f:
+        seqs += json.load(f)
     print('Processing the following scenes: {}'.format(seqs))
 
     print('Saving descriptors to folder: {}'.format(opt.method_name))
@@ -527,8 +518,10 @@ if __name__ == '__main__':
     for seq in seqs:
         print('Processing "{}"'.format(seq))
         count = 0
+        dirr=os.path.join(opt.sequences_folder, seq, 'set_100', 'images')
+        print (dirr)
         vs = VideoStreamer(
-            os.path.join(opt.sequences_folder, seq), None, None, None, 1,
+            dirr, None, None, None, 1,
             opt.img_glob, opt.resize_image_to)
         start = time()
 

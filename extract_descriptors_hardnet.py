@@ -67,10 +67,11 @@ if __name__ == '__main__':
         type=str,
         help='Path to the model weights')
     parser.add_argument(
-        "--subset",
-        default='both',
+        "--data_seq_json",
+        default='data/val.json',
         type=str,
-        help='Options: "val", "test", "both", "spc-fix"')
+
+        help='Path to json with seq names')
     parser.add_argument(
         "--clahe-mode",
         default='None',
@@ -79,18 +80,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if args.subset not in ['val', 'test', 'both', 'spc-fix']:
-        raise ValueError('Unknown value for --subset')
     seqs = []
-    if args.subset == 'spc-fix':
-        seqs += ['st_pauls_cathedral']
-    else:
-        if args.subset in ['val', 'both']:
-            with open(os.path.join('data', 'val.json')) as f:
-                seqs += json.load(f)
-        if args.subset in ['test', 'both']:
-            with open(os.path.join('data', 'test.json')) as f:
-                seqs += json.load(f)
+    with open(args.data_seq_json, 'r') as f:
+        seqs += json.load(f)
     print('Processing the following scenes: {}'.format(seqs))
 
 
@@ -129,7 +121,10 @@ if __name__ == '__main__':
     transforms = get_transforms(False)
 
     model = HardNet()
-    model.load_state_dict(torch.load(args.weights_path,map_location=device)['state_dict'])
+    try:
+        model.load_state_dict(torch.load(args.weights_path,map_location=device)['state_dict'])
+    except:
+        model.load_state_dict(torch.load(args.weights_path,map_location=device))
     print('Loaded weights: {}'.format(args.weights_path))
 
     model = model.to(device)

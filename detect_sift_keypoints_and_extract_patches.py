@@ -73,10 +73,11 @@ if __name__ == '__main__':
         type=str,
         help='can be None, detector, descriptor, both')
     parser.add_argument(
-        "--subset",
-        default='both',
+        "--data_seq_json",
+        default='data/val.json',
         type=str,
-        help='Options: "val", "test", "both", "spc-fix"')
+        
+        help='Path to json with seq names')
     parser.add_argument(
         "--force_upright",
         default='off',
@@ -86,30 +87,27 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if args.subset not in ['val', 'test', 'both', 'spc-fix']:
-        raise ValueError('Unknown value for --subset')
-
+    OPENCV_VERSION = int(cv2.version.opencv_version[0])
     if args.lower_sift_threshold:
         print('Instantiating SIFT detector with a lower detection threshold')
-        sift = cv2.xfeatures2d.SIFT_create(
-            contrastThreshold=-10000, edgeThreshold=-10000)
+        if OPENCV_VERSION < 4:
+            sift = cv2.xfeatures2d.SIFT_create(
+                contrastThreshold=-10000, edgeThreshold=-10000)
+        else:
+            sift = cv2.SIFT_create(contrastThreshold=-10000, edgeThreshold=-10000)
     else:
         print('Instantiating SIFT detector with default values')
-        sift = cv2.xfeatures2d.SIFT_create()
+        if OPENCV_VERSION < 4:
+            sift = cv2.xfeatures2d.SIFT_create()
+        else:
+            sift = cv2.SIFT_create()
 
     if not os.path.isdir(args.folder_outp):
         os.makedirs(args.folder_outp)
 
     scenes = []
-    if args.subset == 'spc-fix':
-        scenes += ['st_pauls_cathedral']
-    else:
-        if args.subset in ['val', 'both']:
-            with open(os.path.join('data', 'val.json')) as f:
-                scenes += json.load(f)
-        if args.subset in ['test', 'both']:
-            with open(os.path.join('data', 'test.json')) as f:
-                scenes += json.load(f)
+    with open(args.data_seq_json, 'r') as f:
+        scenes += json.load(f)
     print('Processing the following scenes: {}'.format(scenes))
 
     suffix = ""
@@ -229,7 +227,6 @@ if __name__ == '__main__':
 
         print('Processed {} images: {} patches/image'.format(
             len(num_patches), np.array(num_patches).mean()))
-
         cur_path = os.path.join(args.folder_outp, scene)
         # if args.force_upright == 'no-dups':
         #     cur_path += '_upright_v1'
