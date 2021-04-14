@@ -202,7 +202,7 @@ and add the folder `third_party/tensorflow_models/research` to $PYTHONPATH. See 
 Use environment `lfnet` and download the model weights:
 ```
 mkdir third_party/lfnet/release
-wget https://cs.ubc.ca/research/kmyi_data/files/2018/ono2018lfnet/lfnet-norotaug.tar.gz -O third_party/lfnet/release/lfnet-norotaug.tar.gz
+wget https://cs.ubc.ca/research/kmyi_data/files/2018/lf-net/lfnet-norotaug.tar.gz -O third_party/lfnet/release/lfnet-norotaug.tar.gz
 tar -C third_party/lfnet/release/ -xf third_party/lfnet/release/lfnet-norotaug.tar.gz
 ```
 Use environment 'lfnet'. Refer to extract_lfnet.py for more options. Extract LF-Net with default 2K keypoints and without resize image:
