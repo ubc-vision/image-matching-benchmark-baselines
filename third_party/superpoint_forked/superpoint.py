@@ -536,7 +536,7 @@ if __name__ == '__main__':
                 print('Failed or over!')
                 break
 
-            key = vs.listing[count].split("/")[-1].split('.')[0]
+            key = '.'.join(vs.listing[count].split("/")[-1].split('.')[:-1])
 
             # Compute superpoint
             # Points are ordered: [x, y]
