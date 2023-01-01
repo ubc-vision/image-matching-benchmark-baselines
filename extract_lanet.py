@@ -7,15 +7,26 @@ import cv2
 import torch
 import torch.nn.functional as F
 import argparse
-from utils import str2bool, save_h5
 import sys
-sys.path.insert(0, f'{os.getcwd()}/third_party/KP2D')
+
+def str2bool(v):
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+
+def save_h5(dict_to_save, filename):
+    """Saves dictionary to hdf5 file"""
+
+    with h5py.File(filename, 'w') as f:
+        for key in dict_to_save:
+            f.create_dataset(key, data=dict_to_save[key])
+
+sys.path.insert(0, f'{os.getcwd()}/third_party/lanet')
 
 import kornia as K
-from kp2d.datasets.patches_dataset import PatchesDataset
-from kp2d.evaluation.evaluate import evaluate_keypoint_net
-from kp2d.networks.keypoint_net import KeypointNet
-from kp2d.networks.keypoint_resnet import KeypointResnet
+from network_v1.model import PointModel as PointModel_v1
+from network_v0.model import PointModel as PointModel_v0
 
 def convert_imc(kps, resps):
     keypoints = kps.reshape(-1, 2).detach().cpu().numpy()
@@ -76,7 +87,7 @@ if __name__ == '__main__':
         '--num_kp',
         type=int,
         default=2048,
-        help='Detector confidence threshold (default: 0.015).')
+        help='number of keypoints')
     parser.add_argument(
         '--resize_image_to',
         type=int,
@@ -86,8 +97,8 @@ if __name__ == '__main__':
     parser.add_argument(
         '--model_version',
         type=str,
-        default='v4',
-        choices=["v0", "v1", "v2", "v3", "v4"])
+        default='v1',
+        choices=["v0", "v1"])
     parser.add_argument(
         '--device',
         type=str,
@@ -100,7 +111,7 @@ if __name__ == '__main__':
         type=str,
         help='Path to store the features')
     parser.add_argument(
-        "--method_name", default='kp2d', type=str)
+        "--method_name", default='lanet', type=str)
     parser.add_argument(
         "--dataset",
         default='all',
@@ -115,11 +126,16 @@ if __name__ == '__main__':
     print(opt)
     vv = opt.model_version
     device = torch.device(opt.device)
-    checkpoint = torch.load(f'third_party/KP2D/data/models/kp2d/{vv}.ckpt',
-                map_location=device)
-    model_args = checkpoint['config']['model']['params']
-    keypoint_net = KeypointNet()
-    keypoint_net.load_state_dict(checkpoint['state_dict'])
+    if vv == 'v1':
+        keypoint_net = PointModel_v1(is_test=True)
+        checkpoint = torch.load('third_party/lanet/checkpoints/PointModel_v1.pth',
+                                map_location=device)
+    else:
+        keypoint_net = PointModel_v0(is_test=True)
+        checkpoint = torch.load('third_party/lanet/checkpoints/PointModel_v0.pth',
+                                map_location=device)
+
+    keypoint_net.load_state_dict(checkpoint['model_state'])
     keypoint_net.eval()
     keypoint_net=keypoint_net.to(device)
     INPUT_DIR = opt.datasets_folder
