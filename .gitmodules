@@ -39,7 +39,7 @@
 	url = https://github.com/TRI-ML/KP2D.git
 [submodule "third_party/pytorch-superpoint"]
 	path = third_party/pytorch-superpoint
-	url = https://github.com/eric-yyjau/pytorch-superpoint.git
+	url = https://github.com/ducha-aiki/pytorch-superpoint.git
 [submodule "third_party/lanet"]
 	path = third_party/lanet
 	url = https://github.com/wangch-g/lanet.git
