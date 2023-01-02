@@ -134,7 +134,7 @@ if __name__ == '__main__':
     os.makedirs(OUT_DIR, exist_ok=True)
     print (f"Will save to {OUT_DIR}")
     if opt.dataset == 'all':
-        datasets = [x for x in os.listdir(INPUT_DIR) if (os.path.isdir(os.path.join(INPUT_DIR, x)))]
+        datasets =  ['phototourism', 'pragueparks']#[x for x in os.listdir(INPUT_DIR) if (os.path.isdir(os.path.join(INPUT_DIR, x)))]
     else:
         datasets = [opt.dataset]
     for ds in datasets:
@@ -168,6 +168,7 @@ if __name__ == '__main__':
                     f_desc[key] = descs.reshape(-1, 256).detach().cpu().numpy()
                     f_score[key] = responses
                     f_ang[key] = angles
+                    f_kp[key] = keypoints
                     f_scale[key] = scales
                     num_kp.append(len(keypoints))
                 print(f'Finished processing "{ds}/{seq}" -> {np.array(num_kp).mean()} features/image')
